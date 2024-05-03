@@ -7,6 +7,21 @@ from bs4 import BeautifulSoup
 import time
 from datetime import datetime
 import re
+from discord_webhook import DiscordWebhook
+import argparse
+
+# Define arguments
+parser = argparse.ArgumentParser(description="SECurityTr8Ker: SEC RSS Feed Monitor")
+parser.add_argument("-d", "--discord", type=str, help="Send results to Discord Webhook provided (forces --no-browser)")
+args = parser.parse_args()
+discord = args.discord
+
+# Check Discord Argument
+if discord is not None:
+    if "https://" not in discord:
+        print("Invalid Discord Webhook")
+        quit()
+
 
 # Define request interval, log file path, and logs directory
 REQUEST_INTERVAL = 0.3
@@ -97,7 +112,10 @@ def fetch_filings_from_rss(url):
                     for document_link in document_links:
                         if inspect_document_for_cybersecurity(document_link):
                             ticker_symbol = get_ticker_symbol(cik_number, company_name)
-                            logger.info(f"Cybersecurity Incident Disclosure found: {company_name} (Ticker:${ticker_symbol}) (CIK:{cik_number}) - {document_link} - Published on {pubDate}")
+                            message = f"Cybersecurity Incident Disclosure found: {company_name} (Ticker:${ticker_symbol}) (CIK:{cik_number}) - {document_link} - Published on {pubDate}"
+                            logger.info(message)
+                            DiscordWebhook(url=discord, content=message)
+                            logger.info(f"Sent Discord Message to {discord}")
                             break  # Assuming we only need to log once per filing
             logger.info("Fetched and parsed RSS feed successfully.", extra={"log_color": "green"})
     except Exception as e:

@@ -1,3 +1,9 @@
+# Changes from upstream repo
+
+- Add .gitignore for a Python environment
+- Add `discord-webhook` to `requirements.txt`
+- Add functionality to send the findings to a Discord webhook by supplying the URL to the webhook with `-d`, `--discord`
+
 # SECurityTr8Ker: SEC RSS Feed Monitor
 
 SECurityTr8Ker is a Python script designed to monitor the U.S. Securities and Exchange Commission's (SEC) RSS feed for new 8-K and 6-K filings that contain material related to cybersecurity incidents. This script is tailored for cybersecurity analysts, financial professionals, and researchers interested in real-time alerts of potential cybersecurity incidents disclosed by publicly traded companies.

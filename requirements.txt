@@ -2,3 +2,4 @@ requests
 xmltodict
 beautifulsoup4
 colorlog
+discord-webhook
