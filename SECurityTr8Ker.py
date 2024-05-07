@@ -108,13 +108,12 @@ def fetch_filings_from_rss(url):
                     company_name = xbrlFiling['edgar:companyName']
                     cik_number = xbrlFiling['edgar:cikNumber']
                     document_links = [xbrlFile['@edgar:url'] for xbrlFile in xbrlFiling['edgar:xbrlFiles']['edgar:xbrlFile'] if xbrlFile['@edgar:url'].endswith(('.htm', '.html'))]
-                    
                     for document_link in document_links:
                         if inspect_document_for_cybersecurity(document_link):
                             ticker_symbol = get_ticker_symbol(cik_number, company_name)
                             message = f"Cybersecurity Incident Disclosure found: {company_name} (Ticker:${ticker_symbol}) (CIK:{cik_number}) - {document_link} - Published on {pubDate}"
                             logger.info(message)
-                            DiscordWebhook(url=discord, content=message)
+                            DiscordWebhook(url=discord, content=message).execute()
                             logger.info(f"Sent Discord Message to {discord}")
                             break  # Assuming we only need to log once per filing
             logger.info("Fetched and parsed RSS feed successfully.", extra={"log_color": "green"})
